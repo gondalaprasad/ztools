@@ -1,0 +1,436 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Dashboard | Format Converter</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <style>
+        :root {
+            --primary-color: #3498db;
+            --secondary-color: #2c3e50;
+            --accent-color: #9b59b6;
+            --light-color: #ecf0f1;
+            --dark-color: #34495e;
+            --success-color: #2ecc71;
+            --border-radius: 8px;
+            --box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+            --transition: all 0.3s ease;
+        }
+
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+        }
+
+        body {
+            display: flex;
+            min-height: 100vh;
+            background-color: #f5f7fa;
+            color: var(--dark-color);
+        }
+
+        /* Sidebar Styles */
+        .sidebar {
+            width: 250px;
+            background-color: var(--secondary-color);
+            color: white;
+            padding: 20px 0;
+            transition: var(--transition);
+            box-shadow: var(--box-shadow);
+            z-index: 100;
+            height: 100vh;
+            position: fixed;
+            left: 0;
+            top: 0;
+            overflow-y: auto;
+        }
+
+        .sidebar-header {
+            padding: 0 20px 20px;
+            border-bottom: 1px solid rgba(255, 255, 255, 0.1);
+            margin-bottom: 20px;
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+
+        .logo {
+            font-size: 24px;
+            font-weight: 700;
+        }
+
+        .sidebar-menu {
+            list-style: none;
+        }
+
+        .sidebar-menu li {
+            margin-bottom: 5px;
+        }
+
+        .sidebar-menu a {
+            display: flex;
+            align-items: center;
+            padding: 12px 20px;
+            color: rgba(255, 255, 255, 0.8);
+            text-decoration: none;
+            transition: var(--transition);
+            border-left: 3px solid transparent;
+        }
+
+        .sidebar-menu a:hover, .sidebar-menu a.active {
+            background-color: rgba(255, 255, 255, 0.1);
+            color: white;
+            border-left-color: var(--primary-color);
+        }
+
+        .sidebar-menu a i {
+            margin-right: 10px;
+            width: 20px;
+            text-align: center;
+        }
+
+        /* Main Content Styles */
+        .main-content {
+            flex: 1;
+            margin-left: 250px;
+            transition: var(--transition);
+        }
+
+        .header {
+            background-color: white;
+            padding: 15px 30px;
+            box-shadow: var(--box-shadow);
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            position: sticky;
+            top: 0;
+            z-index: 99;
+        }
+
+        .page-title {
+            font-size: 24px;
+            font-weight: 600;
+            color: var(--dark-color);
+        }
+
+        .user-info {
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+
+        .user-avatar {
+            width: 40px;
+            height: 40px;
+            border-radius: 50%;
+            background-color: var(--primary-color);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: white;
+            font-weight: 600;
+        }
+
+        /* Page Content */
+        .page-content {
+            padding: 30px;
+        }
+
+        .card {
+            background-color: white;
+            border-radius: var(--border-radius);
+            box-shadow: var(--box-shadow);
+            padding: 25px;
+            margin-bottom: 20px;
+        }
+
+        .card-title {
+            font-size: 18px;
+            font-weight: 600;
+            margin-bottom: 20px;
+            color: var(--dark-color);
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+
+        .card-title i {
+            color: var(--primary-color);
+        }
+
+        /* Form Styles */
+        .form-group {
+            margin-bottom: 20px;
+        }
+
+        label {
+            display: block;
+            margin-bottom: 8px;
+            font-weight: 500;
+        }
+
+        textarea {
+            width: 100%;
+            padding: 12px 15px;
+            border: 1px solid #ddd;
+            border-radius: var(--border-radius);
+            resize: vertical;
+            min-height: 120px;
+            font-size: 14px;
+            transition: var(--transition);
+        }
+
+        textarea:focus {
+            outline: none;
+            border-color: var(--primary-color);
+            box-shadow: 0 0 0 3px rgba(52, 152, 219, 0.2);
+        }
+
+        .btn {
+            display: inline-flex;
+            align-items: center;
+            gap: 8px;
+            padding: 10px 20px;
+            background-color: var(--primary-color);
+            color: white;
+            border: none;
+            border-radius: var(--border-radius);
+            cursor: pointer;
+            font-weight: 500;
+            transition: var(--transition);
+        }
+
+        .btn:hover {
+            background-color: #2980b9;
+            transform: translateY(-2px);
+            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+        }
+
+        .btn-success {
+            background-color: var(--success-color);
+        }
+
+        .btn-success:hover {
+            background-color: #27ae60;
+        }
+
+        .result-container {
+            margin-top: 20px;
+        }
+
+        .result-label {
+            font-weight: 500;
+            margin-bottom: 8px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+
+        .copy-btn {
+            background-color: transparent;
+            color: var(--primary-color);
+            font-size: 14px;
+            padding: 5px 10px;
+        }
+
+        .copy-btn:hover {
+            background-color: rgba(52, 152, 219, 0.1);
+            transform: none;
+        }
+
+        .result {
+            padding: 15px;
+            background-color: #f8f9fa;
+            border: 1px solid #eee;
+            border-radius: var(--border-radius);
+            min-height: 60px;
+            font-family: 'Courier New', monospace;
+            line-height: 1.5;
+        }
+
+        /* Responsive */
+        @media (max-width: 992px) {
+            .sidebar {
+                width: 70px;
+                padding: 20px 0;
+            }
+            
+            .sidebar-header {
+                justify-content: center;
+            }
+            
+            .logo-text, .sidebar-menu span {
+                display: none;
+            }
+            
+            .sidebar-menu a {
+                justify-content: center;
+                padding: 15px;
+            }
+            
+            .sidebar-menu a i {
+                margin-right: 0;
+                font-size: 18px;
+            }
+            
+            .main-content {
+                margin-left: 70px;
+            }
+        }
+
+        @media (max-width: 768px) {
+            .header {
+                padding: 15px;
+            }
+            
+            .page-title {
+                font-size: 20px;
+            }
+            
+            .page-content {
+                padding: 20px 15px;
+            }
+            
+            .card {
+                padding: 20px;
+            }
+        }
+    </style>
+</head>
+<body>
+    <!-- Sidebar -->
+    <div class="sidebar">
+        <div class="sidebar-header">
+            <div class="logo">
+                <i class="fas fa-th-large"></i>
+                <span class="logo-text">Dashboard</span>
+            </div>
+        </div>
+        <ul class="sidebar-menu">
+            <li>
+                <a href="#" class="active">
+                    <i class="fas fa-home"></i>
+                    <span>Dashboard</span>
+                </a>
+            </li>
+            <li>
+                <a href="#" id="formatConverterLink">
+                    <i class="fas fa-exchange-alt"></i>
+                    <span>Format Converter</span>
+                </a>
+            </li>
+            <!-- Additional menu items can be added here -->
+        </ul>
+    </div>
+
+    <!-- Main Content -->
+    <div class="main-content">
+        <div class="header">
+            <div class="page-title">Format Converter</div>
+            <div class="user-info">
+                <div class="user-avatar">
+                    <span>U</span>
+                </div>
+            </div>
+        </div>
+
+        <div class="page-content">
+            <div class="card">
+                <h2 class="card-title">
+                    <i class="fas fa-exchange-alt"></i>
+                    Data Format Converter
+                </h2>
+                <p>Convert comma-separated values to quoted format. Supports multiple input formats:</p>
+                <ul style="margin: 15px 0 20px 25px;">
+                    <li>AB1234,CD1234</li>
+                    <li>AB1234,<br>CD1234</li>
+                    <li>AB1234, CD1234</li>
+                </ul>
+                
+                <div class="form-group">
+                    <label for="inputData">Input Data:</label>
+                    <textarea id="inputData" placeholder="Enter your data here..."></textarea>
+                </div>
+                
+                <button id="convertBtn" class="btn btn-success">
+                    <i class="fas fa-sync-alt"></i>
+                    Convert
+                </button>
+                
+                <div class="result-container">
+                    <div class="result-label">
+                        <span>Converted Output:</span>
+                        <button id="copyBtn" class="btn copy-btn">
+                            <i class="fas fa-copy"></i>
+                            Copy
+                        </button>
+                    </div>
+                    <div id="result" class="result"></div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        // Format Converter Functionality
+        document.addEventListener('DOMContentLoaded', function() {
+            const inputData = document.getElementById('inputData');
+            const convertBtn = document.getElementById('convertBtn');
+            const result = document.getElementById('result');
+            const copyBtn = document.getElementById('copyBtn');
+            
+            // Convert function
+            convertBtn.addEventListener('click', function() {
+                const inputText = inputData.value.trim();
+                
+                if (!inputText) {
+                    result.textContent = 'Please enter some data to convert.';
+                    return;
+                }
+                
+                // Split by comma and new line, then filter out empty values
+                const values = inputText
+                    .split(/[,\\n\\r]+/)
+                    .map(item => item.trim())
+                    .filter(item => item.length > 0);
+                
+                // Format as 'VALUE1','VALUE2','VALUE3'
+                const converted = values.map(item => `'${item}'`).join(',');
+                
+                result.textContent = converted;
+            });
+            
+            // Copy to clipboard
+            copyBtn.addEventListener('click', function() {
+                const textToCopy = result.textContent;
+                
+                if (!textToCopy || textToCopy === 'Please enter some data to convert.') {
+                    return;
+                }
+                
+                navigator.clipboard.writeText(textToCopy).then(() => {
+                    const originalText = copyBtn.innerHTML;
+                    copyBtn.innerHTML = '<i class="fas fa-check"></i> Copied!';
+                    
+                    setTimeout(() => {
+                        copyBtn.innerHTML = originalText;
+                    }, 2000);
+                }).catch(err => {
+                    console.error('Could not copy text: ', err);
+                });
+            });
+            
+            // Sidebar navigation (can be expanded for multiple pages)
+            document.getElementById('formatConverterLink').addEventListener('click', function(e) {
+                e.preventDefault();
+                // In a real app, this would load the format converter page
+                document.querySelector('.page-title').textContent = 'Format Converter';
+            });
+        });
+    </script>
+</body>
+</html>
